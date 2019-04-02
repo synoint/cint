@@ -3,8 +3,7 @@ namespace Syno\Cint\Connect;
 
 class Config
 {
-    /** @var string */
-    private $domain;
+    const API_DOMAIN = 'https://connect.cint.com';
 
     /** @var string */
     private $accountId;
@@ -16,14 +15,12 @@ class Config
     private $password;
 
     /**
-     * @param string $domain
      * @param string $accountId
      * @param string $username
      * @param string $password
      */
-    public function __construct(string $domain, string $accountId, string $username, string $password)
+    public function __construct(string $accountId, string $username, string $password)
     {
-        $this->domain    = $domain;
         $this->accountId = $accountId;
         $this->username  = $username;
         $this->password  = $password;
@@ -34,7 +31,7 @@ class Config
      */
     public function getDomain(): string
     {
-        return $this->domain;
+        return self::API_DOMAIN;
     }
 
     /**
