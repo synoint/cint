@@ -5,7 +5,7 @@ class Config
 {
     const API_DOMAIN = 'https://connect.cint.com';
 
-    /** @var string */
+    /** @var int */
     private $accountId;
 
     /** @var string */
@@ -15,11 +15,11 @@ class Config
     private $password;
 
     /**
-     * @param string $accountId
+     * @param int    $accountId
      * @param string $username
      * @param string $password
      */
-    public function __construct(string $accountId, string $username, string $password)
+    public function __construct(int $accountId = 0, string $username = '', string $password = '')
     {
         $this->accountId = $accountId;
         $this->username  = $username;
@@ -35,9 +35,9 @@ class Config
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getAccountId() : string
+    public function getAccountId() : int
     {
         return $this->accountId;
     }

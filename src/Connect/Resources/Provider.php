@@ -1,5 +1,5 @@
 <?php
-namespace Cint\Connect\Resources;
+namespace Syno\Cint\Connect\Resources;
 
 use Syno\Cint\Connect\Client;
 

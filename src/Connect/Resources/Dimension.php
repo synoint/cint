@@ -1,5 +1,5 @@
 <?php
-namespace Cint\Connect\Resources;
+namespace Syno\Cint\Connect\Resources;
 
 use Syno\Cint\Connect\Client;
 
@@ -25,8 +25,8 @@ class Dimension
      */
     public function all(string $provider): array
     {
-        $valid = ['BasicProfiling', 'GlobalQuestions', 'UserAgent', 'CustomMetrics', 'MatchData'];
-        if (!in_array($provider, $valid)) {
+        $valid = ['basicprofiling', 'globalquestions', 'useragent', 'custommetrics', 'matchdata'];
+        if (!in_array(strtolower($provider), $valid)) {
             throw new \InvalidArgumentException(
                 sprintf('Provider "%s" is invalid, must be one of "%s"', $provider, implode(', ', $valid))
             );

@@ -1,7 +1,7 @@
 <?php
 namespace Syno\Cint\Connect;
 
-use GuzzleHttp;
+use Syno\Cint\HttpClient;
 
 class Client
 {
@@ -10,14 +10,14 @@ class Client
     /** @var Config */
     private $config;
 
-    /** @var GuzzleHttp\ClientInterface */
+    /** @var HttpClient */
     private $client;
 
     /**
-     * @param Config                     $config
-     * @param GuzzleHttp\ClientInterface $client
+     * @param Config     $config
+     * @param HttpClient $client
      */
-    public function __construct(Config $config, GuzzleHttp\ClientInterface $client)
+    public function __construct(Config $config, HttpClient $client)
     {
         $this->config = $config;
         $this->client = $client;
@@ -25,8 +25,6 @@ class Client
 
     /**
      * @param string $uri
-     *
-     * @throws GuzzleHttp\Exception\GuzzleException
      *
      * @return array
      */

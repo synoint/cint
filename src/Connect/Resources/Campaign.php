@@ -1,5 +1,5 @@
 <?php
-namespace Cint\Connect\Resources;
+namespace Syno\Cint\Connect\Resources;
 
 use Syno\Cint\Connect\Config;
 use Syno\Cint\Connect\Client;
@@ -30,7 +30,7 @@ class Campaign
     public function all(): array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign', $this->config->getAccountId())
+            sprintf('/api/%d/campaign', $this->config->getAccountId())
         );
     }
 
@@ -42,7 +42,7 @@ class Campaign
     public function details(int $campaignId): array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign/%d', $this->config->getAccountId(), $campaignId)
+            sprintf('/api/%d/campaign/%d', $this->config->getAccountId(), $campaignId)
         );
     }
 
@@ -54,7 +54,7 @@ class Campaign
     public function summary(int $campaignId) : array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign/%d/summary', $this->config->getAccountId(), $campaignId)
+            sprintf('/api/%d/campaign/%d/summary', $this->config->getAccountId(), $campaignId)
         );
     }
 
@@ -66,7 +66,7 @@ class Campaign
     public function histogram(int $campaignId) : array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign/%d/histogram', $this->config->getAccountId(), $campaignId)
+            sprintf('/api/%d/campaign/%d/histogram', $this->config->getAccountId(), $campaignId)
         );
     }
 
@@ -78,7 +78,7 @@ class Campaign
     public function metrics(int $campaignId) : array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign/%d/metrics', $this->config->getAccountId(), $campaignId)
+            sprintf('/api/%d/campaign/%d/metrics', $this->config->getAccountId(), $campaignId)
         );
     }
 
@@ -90,7 +90,7 @@ class Campaign
     public function referers(int $campaignId) : array
     {
         return $this->client->get(
-            sprintf('/api/%s/campaign/%d/metrics/referer', $this->config->getAccountId(), $campaignId)
+            sprintf('/api/%d/campaign/%d/metrics/referer', $this->config->getAccountId(), $campaignId)
         );
     }
 }

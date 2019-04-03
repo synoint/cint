@@ -15,9 +15,9 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('connect')
                     ->children()
-                        ->integerNode('account_id')->end()
-                        ->scalarNode('username')->end()
-                        ->scalarNode('password')->end()
+                        ->variableNode('account_id')->end()
+                        ->variableNode('username')->end()
+                        ->variableNode('password')->end()
                     ->end()
                 ->end() // Connect
             ->end()
