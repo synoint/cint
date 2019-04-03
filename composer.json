@@ -17,5 +17,8 @@
     "autoload": {
         "psr-4": { "Syno\\Cint\\": "src/" }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "require-dev": {
+        "symfony/framework-bundle": "^4.3@dev"
+    }
 }

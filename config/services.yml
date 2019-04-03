@@ -1,0 +1,60 @@
+parameters:
+    syno.cint.guzzle.client.class: GuzzleHttp\Client
+
+    syno.cint.connect.client.class: Syno\Cint\Connect\Client
+    syno.cint.connect.config.class: Syno\Cint\Connect\Config
+
+    syno.cint.connect.resources.campaign.class: Syno\Cint\Connect\Resources\Campaign
+    syno.cint.connect.resources.dimension.class: Syno\Cint\Connect\Resources\Dimension
+    syno.cint.connect.resources.provider.class: Syno\Cint\Connect\Resources\Provider
+
+    syno.cint.demand.config.class: Syno\Cint\Demand\Config
+    syno.cint.panel.config.class: Syno\Cint\Panel\Config
+    syno.cint.profiling_data.config.class: Syno\Cint\ProfilingData\Config
+
+services:
+
+    syno.cint.guzzle.client:
+        class: "%syno.cint.guzzle.client.class%"
+        public: false
+
+    syno.cint.connect.client:
+        class: "%syno.cint.connect.client.class%"
+        public: false
+        arguments:
+            - "@syno.cint.connect.config"
+            - syno.cint.guzzle.client
+
+    syno.cint.connect.config:
+        class:   "%syno.cint.connect.config.class%"
+        public:  false
+        arguments:
+            - ""
+            - ""
+            - ""
+
+    syno.cint.connect.resources.campaign:
+        class: "%syno.cint.connect.resources.campaign.class%"
+        public: false
+        arguments:
+            - "@syno.cint.connect.config"
+            - syno.cint.guzzle.client
+        tags:
+            - { name: syno.cint.connect_resource }
+
+
+    syno.cint.connect.resources.dimension:
+        class: "%syno.cint.connect.resources.dimension.class%"
+        public: false
+        arguments:
+            - syno.cint.guzzle.client
+        tags:
+            - { name: syno.cint.connect_resource }
+
+    syno.cint.connect.resources.provider:
+        class: "%syno.cint.connect.resources.provider.class%"
+        public: false
+        arguments:
+            - syno.cint.guzzle.client
+        tags:
+            - { name: syno.cint.connect_resource }
