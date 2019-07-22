@@ -9,3 +9,6 @@ services:
 
     Syno\Cint\Connect\:
         resource: '../src/Connect/*'
+
+    Syno\Cint\Demand\:
+        resource: '../src/Demand/*'

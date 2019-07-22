@@ -3,19 +3,16 @@ namespace Syno\Cint\Demand;
 
 class Config
 {
-    /** @var string */
-    private $domain;
+    const API_DOMAIN = 'https://api.cintworks.net';
 
     /** @var string */
     private $apiKey;
 
     /**
-     * @param string $domain
      * @param string $apiKey
      */
-    public function __construct(string $domain, string $apiKey)
+    public function __construct(string $apiKey)
     {
-        $this->domain = $domain;
         $this->apiKey = $apiKey;
     }
 
@@ -24,7 +21,7 @@ class Config
      */
     public function getDomain(): string
     {
-        return $this->domain;
+        return self::API_DOMAIN;
     }
 
     /**

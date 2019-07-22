@@ -20,6 +20,11 @@ class Configuration implements ConfigurationInterface
                         ->variableNode('password')->end()
                     ->end()
                 ->end() // Connect
+                ->arrayNode('demand')
+                    ->children()
+                        ->variableNode('api_key')->end()
+                    ->end()
+                ->end() // Demand
             ->end()
         ;
 

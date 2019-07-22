@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Syno\Cint\Connect;
+use Syno\Cint\Demand;
 
 class SynoCintExtension extends ConfigurableExtension
 {
@@ -24,6 +25,17 @@ class SynoCintExtension extends ConfigurableExtension
             $connectResources = $container->findTaggedServiceIds('syno.cint.connect_resource');
             foreach (array_keys($connectResources) as $connectResourceId) {
                 $container->removeDefinition($connectResourceId);
+            }
+        }
+
+        $demand = $mergedConfig['demand'] ?? [];
+        if (!empty($demand['api_key'])) {
+            $demandConfigDef = $container->getDefinition(Demand\Config::class);
+            $demandConfigDef->setArguments([$demand['api_key']]);
+        } else {
+            $demandResources = $container->findTaggedServiceIds('syno.cint.demand_resource');
+            foreach (array_keys($demandResources) as $demandResourceId) {
+                $container->removeDefinition($demandResourceId);
             }
         }
     }
