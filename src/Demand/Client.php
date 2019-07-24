@@ -84,9 +84,12 @@ class Client
             $this->config->getDomain() . $uri, $parameters
         );
 
-        if ($response->getStatusCode() == self::HTTP_ACCEPTED) {
-            $result = json_decode($response->getBody(), true);
-        }
+         switch ($response->getStatusCode()) {
+             case self::HTTP_OK:
+             case self::HTTP_ACCEPTED:
+             case self::HTTP_CREATED:
+                 $result = json_decode($response->getBody(), true);
+         }
 
         return $result;
     }
