@@ -29,9 +29,9 @@ class SynoCintExtension extends ConfigurableExtension
         }
 
         $demand = $mergedConfig['demand'] ?? [];
-        if (!empty($demand['api_key'])) {
+        if (!empty($demand['api_domain']) && !empty($demand['api_key'])) {
             $demandConfigDef = $container->getDefinition(Demand\Config::class);
-            $demandConfigDef->setArguments([$demand['api_key']]);
+            $demandConfigDef->setArguments([$demand['api_domain'], $demand['api_key']]);
         } else {
             $demandResources = $container->findTaggedServiceIds('syno.cint.demand_resource');
             foreach (array_keys($demandResources) as $demandResourceId) {

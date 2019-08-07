@@ -13,18 +13,24 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder->getRootNode()
             ->children()
+                // Connect
                 ->arrayNode('connect')
                     ->children()
                         ->variableNode('account_id')->end()
                         ->variableNode('username')->end()
                         ->variableNode('password')->end()
                     ->end()
-                ->end() // Connect
+                ->end()
+                // End Connect
+
+                // Demand
                 ->arrayNode('demand')
                     ->children()
+                        ->variableNode('api_domain')->end()
                         ->variableNode('api_key')->end()
                     ->end()
-                ->end() // Demand
+                ->end()
+                // End Demand
             ->end()
         ;
 
