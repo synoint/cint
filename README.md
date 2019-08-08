@@ -30,6 +30,10 @@ syno_cint:
     account_id: '%env(CINT_CONNECT_API_DEFAULT_ACCOUNT)%'
     username: '%env(CINT_CONNECT_API_DEFAULT_USERNAME)%'
     password: '%env(CINT_CONNECT_API_DEFAULT_PASSWORD)%'
+
+  demand:
+    api_domain: '%env(CINT_DEMAND_API_DOMAIN)%'
+    api_key: '%env(CINT_DEMAND_API_KEY)%'
 ```
 
 Make sure you have set those environment variables. 
