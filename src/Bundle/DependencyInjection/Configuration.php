@@ -28,6 +28,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->variableNode('api_domain')->end()
                         ->variableNode('api_key')->end()
+                        ->variableNode('api_domain')->end()
                     ->end()
                 ->end()
                 // End Demand
