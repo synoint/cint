@@ -3,14 +3,10 @@
 namespace Syno\Cint\Demand;
 
 use Syno\Cint\HttpClient;
+use Guzzle\Http\Exception\ClientException;
 
 class Client
 {
-    const HTTP_OK = 200;
-    const HTTP_CREATED = 201;
-    const HTTP_ACCEPTED = 202;
-    const HTTP_NO_CONTENT = 204;
-
     /** @var Config */
     private $config;
 
@@ -50,13 +46,16 @@ class Client
             $parameters = $headerParameters;
         }
 
-        $response = $this->client->request(
-            'GET',
-            $this->config->getDomain() . $uri, $parameters
-        );
+        try {
+            $response = $this->client->request(
+                'GET',
+                $this->config->getDomain() . $uri, $parameters
+            );
 
-        if (self::HTTP_OK === $response->getStatusCode()) {
             $result = json_decode($response->getBody(), true);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
         }
 
         return $result;
@@ -79,17 +78,17 @@ class Client
             $parameters = $headerParameters;
         }
 
-        $response = $this->client->request(
-            'POST',
-            $this->config->getDomain() . $uri, $parameters
-        );
+        try {
+            $response = $this->client->request(
+                'POST',
+                $this->config->getDomain() . $uri, $parameters
+            );
 
-         switch ($response->getStatusCode()) {
-             case self::HTTP_OK:
-             case self::HTTP_ACCEPTED:
-             case self::HTTP_CREATED:
-                 $result = json_decode($response->getBody(), true);
-         }
+            $result = json_decode($response->getBody(), true);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+        }
 
         return $result;
     }
@@ -111,16 +110,15 @@ class Client
             $parameters = $headerParameters;
         }
 
-        $response = $this->client->request(
-            'PATCH',
-            $this->config->getDomain() . $uri, $parameters
-        );
+        try{
+            $response = $this->client->request(
+                'PATCH',
+                $this->config->getDomain() . $uri, $parameters
+            );
 
-        switch ($response->getStatusCode()) {
-            case self::HTTP_OK:
-            case self::HTTP_ACCEPTED:
-            case self::HTTP_NO_CONTENT:
-                $result = json_decode($response->getBody(), true);
+            $result = json_decode($response->getBody(), true);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
         }
 
         return $result;
