@@ -7,6 +7,8 @@ use Guzzle\Http\Exception\ClientException;
 
 class Client
 {
+    const DEMAND_API_ERROR_MESSAGE = "Unable to get response from Cint Demand API";
+
     /** @var Config */
     private $config;
 
@@ -31,8 +33,6 @@ class Client
      */
     public function get(string $uri, array $parameters = null): array
     {
-        $result = [];
-
         $headerParameters = [
             'headers' =>
                 [
@@ -55,7 +55,11 @@ class Client
             $result = json_decode($response->getBody(), true);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            if(!empty($e->getResponse()->getBody()->getContents())) {
+                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            } else {
+                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
+            }
         }
 
         return $result;
@@ -87,7 +91,11 @@ class Client
             $result = json_decode($response->getBody(), true);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            if(!empty($e->getResponse()->getBody()->getContents())) {
+                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            } else {
+                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
+            }
         }
 
         return $result;
@@ -118,7 +126,11 @@ class Client
 
             $result = json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            if(!empty($e->getResponse()->getBody()->getContents())) {
+                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+            } else {
+                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
+            }
         }
 
         return $result;

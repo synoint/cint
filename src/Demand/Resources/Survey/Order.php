@@ -65,4 +65,15 @@ class Order
     {
         return $this->client->get('/ordering/surveys/');
     }
+
+    /**
+     * @param integer $surveyId
+     * Returns survey current cost
+     *
+     * @return array
+     */
+    public function getCurrentCost(int $surveyId): array
+    {
+        return $this->client->get("/ordering/surveys/".$surveyId."/CurrentCost");
+    }
 }
