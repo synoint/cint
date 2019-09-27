@@ -55,8 +55,11 @@ class Client
             $result = json_decode($response->getBody(), true);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            if(!empty($e->getResponse()->getBody()->getContents())) {
-                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+
+            $responseInJason = $e->getResponse()->getBody()->getContents();
+
+            if(!empty($responseInJason)) {
+                $result = json_decode($responseInJason, true);
             } else {
                 $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
             }
@@ -67,8 +70,6 @@ class Client
 
     public function post(string $uri, array $parameters = null): array
     {
-        $result = [];
-
         $headerParameters = [
             'headers' =>
                 [
@@ -91,8 +92,11 @@ class Client
             $result = json_decode($response->getBody(), true);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            if(!empty($e->getResponse()->getBody()->getContents())) {
-                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+
+            $responseInJason = $e->getResponse()->getBody()->getContents();
+
+            if(!empty($responseInJason)) {
+                $result = json_decode($responseInJason, true);
             } else {
                 $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
             }
@@ -103,8 +107,6 @@ class Client
 
     public function put(string $uri, array $parameters = null): array
     {
-        $result = [];
-
         $headerParameters = [
             'headers' =>
                 [
@@ -126,8 +128,11 @@ class Client
 
             $result = json_decode($response->getBody(), true);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
-            if(!empty($e->getResponse()->getBody()->getContents())) {
-                $result = json_decode($e->getResponse()->getBody()->getContents(), true);
+
+            $responseInJason = $e->getResponse()->getBody()->getContents();
+
+            if(!empty($responseInJason)) {
+                $result = json_decode($responseInJason, true);
             } else {
                 $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
             }
