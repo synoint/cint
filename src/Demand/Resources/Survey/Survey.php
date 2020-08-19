@@ -5,7 +5,7 @@ namespace Syno\Cint\Demand\Resources\Survey;
 use Syno\Cint\Demand\Config;
 use Syno\Cint\Demand\Client;
 
-class Order
+class Survey
 {
     /** @var Config */
     private $config;
