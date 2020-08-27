@@ -43,7 +43,7 @@ class Survey
      */
     public function changeStatus(int $id, int $statusId): array
     {
-        return $this->client->put('/ordering/surveys/' . $id, ['op' => 'replace', 'path' => '/status', 'value' => $statusId]);
+        return $this->client->patch('/ordering/surveys/' . $id, ['op' => 'replace', 'path' => '/status', 'value' => $statusId]);
     }
 
     /**

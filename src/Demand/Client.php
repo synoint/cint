@@ -105,7 +105,7 @@ class Client
         return $result;
     }
 
-    public function put(string $uri, array $parameters = null): array
+    public function patch(string $uri, array $parameters = null): array
     {
         $headerParameters = [
             'headers' =>
