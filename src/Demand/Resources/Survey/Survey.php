@@ -35,14 +35,15 @@ class Survey
     }
 
     /**
-     * @param array $params
+     * @param int $id
+     * @param int $statusId
      * Changes survey project status
      *
      * @return array
      */
-    public function changeStatus($id, $params): array
+    public function changeStatus(int $id, int $statusId): array
     {
-        return $this->client->put('/ordering/surveys/' . $id, $params);
+        return $this->client->put('/ordering/surveys/' . $id, ['op' => 'replace', 'path' => '/status', 'value' => $statusId]);
     }
 
     /**
