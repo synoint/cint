@@ -2,12 +2,14 @@
 
 namespace Syno\Cint\Demand;
 
+use Psr\Http\Message\ResponseInterface;
 use Syno\Cint\HttpClient;
 use Guzzle\Http\Exception\ClientException;
 
 class Client
 {
-    const DEMAND_API_ERROR_MESSAGE = "Unable to get response from Cint Demand API";
+    const DEMAND_API_ERROR_MESSAGE      = "Unable to get response from Cint Demand API";
+    const DEMAND_API_NOT_FOUND_MESSAGE  = "Not found";
 
     /** @var Config */
     private $config;
@@ -52,7 +54,7 @@ class Client
                 $this->config->getDomain() . $uri, $parameters
             );
 
-            $result = json_decode($response->getBody(), true);
+            $result = $this->getResponse($response);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
 
@@ -89,7 +91,7 @@ class Client
                 $this->config->getDomain() . $uri, $parameters
             );
 
-            $result = json_decode($response->getBody(), true);
+            $result = $this->getResponse($response);
 
         } catch (\GuzzleHttp\Exception\RequestException $e) {
 
@@ -126,7 +128,8 @@ class Client
                 $this->config->getDomain() . $uri, $parameters
             );
 
-            $result = json_decode($response->getBody(), true);
+            $result = $this->getResponse($response);
+
         } catch (\GuzzleHttp\Exception\RequestException $e) {
 
             $responseInJason = $e->getResponse()->getBody()->getContents();
@@ -136,6 +139,31 @@ class Client
             } else {
                 $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
             }
+        }
+
+        return $result;
+    }
+
+    private function getResponse(ResponseInterface $response): array
+    {
+        $result = [];
+
+        switch ($response->getStatusCode()) {
+            case 200:
+            case 201:
+            case 202:
+                $result = json_decode($response->getBody(), true);
+                break;
+            case 204:
+            case 205:
+                $result[] = true;
+                break;
+            case 404:
+                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_NOT_FOUND_MESSAGE]]];
+                break;
+            case 500:
+                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
+                break;
         }
 
         return $result;
