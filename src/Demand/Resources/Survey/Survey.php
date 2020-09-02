@@ -48,13 +48,22 @@ class Survey
 
     /**
      * @param int $id
-     * @param array $params
+     * @param int $surveyLimit
+     * @param array $quotasLimit
      * Updates survey limits
      *
      * @return array
      */
-    public function updateLimits(int $id, array $params): array
+    public function updateLimits(int $id, int $surveyLimit, array $quotasLimit): array
     {
+        $params = [['op' => 'replace', 'path' => '/limit', 'value' => $surveyLimit]];
+
+        foreach($quotasLimit as $quotaGroupKey => $quotaGroup){
+            foreach($quotaGroup as $quotaKey => $quotaLimit){
+                $params[] = ['op' => 'replace', 'path' => '/quotaGroups/'.$quotaGroupKey.'/quotas/'.$quotaKey.'/limit', 'value' => $quotaLimit];
+            }
+        }
+
         return $this->client->patch('/ordering/surveys/' . $id, $params);
     }
 
