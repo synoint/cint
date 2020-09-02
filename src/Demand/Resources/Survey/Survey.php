@@ -43,7 +43,19 @@ class Survey
      */
     public function changeStatus(int $id, int $statusId): array
     {
-        return $this->client->patch('/ordering/surveys/' . $id, ['op' => 'replace', 'path' => '/status', 'value' => $statusId]);
+        return $this->client->patch('/ordering/surveys/' . $id, [['op' => 'replace', 'path' => '/status', 'value' => $statusId]]);
+    }
+
+    /**
+     * @param int $id
+     * @param array $params
+     * Updates survey limits
+     *
+     * @return array
+     */
+    public function updateLimits(int $id, array $params): array
+    {
+        return $this->client->patch('/ordering/surveys/' . $id, $params);
     }
 
     /**

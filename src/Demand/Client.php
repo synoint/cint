@@ -117,7 +117,7 @@ class Client
         ];
 
         if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, ['json' => [$parameters]]);
+            $parameters = array_merge($headerParameters, ['json' => $parameters]);
         } else {
             $parameters = $headerParameters;
         }
