@@ -19,7 +19,7 @@ class Config
      * @param string $username
      * @param string $password
      */
-    public function __construct(string $accountId = 0, string $username = '', string $password = '')
+    public function __construct($accountId, string $username = '', string $password = '')
     {
         $this->accountId = (int) $accountId;
         $this->username  = $username;
