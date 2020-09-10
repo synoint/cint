@@ -15,13 +15,13 @@ class Config
     private $password;
 
     /**
-     * @param int    $accountId
+     * @param string $accountId
      * @param string $username
      * @param string $password
      */
-    public function __construct(int $accountId = 0, string $username = '', string $password = '')
+    public function __construct(string $accountId = 0, string $username = '', string $password = '')
     {
-        $this->accountId = $accountId;
+        $this->accountId = (int) $accountId;
         $this->username  = $username;
         $this->password  = $password;
     }
