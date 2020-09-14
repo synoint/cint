@@ -144,6 +144,43 @@ class Client
         return $result;
     }
 
+    public function delete(string $uri, array $parameters = null): array
+    {
+        $headerParameters = [
+            'headers' =>
+                [
+                    'x-api-key' => $this->config->getApiKey()
+                ]
+        ];
+
+        if (!empty($parameters)) {
+            $parameters = array_merge($headerParameters, ['json' => $parameters]);
+        } else {
+            $parameters = $headerParameters;
+        }
+
+        try {
+            $response = $this->client->request(
+                'DELETE',
+                $this->config->getDomain() . $uri, $parameters
+            );
+
+            $result = $this->getResponse($response);
+
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+
+            $responseInJason = $e->getResponse()->getBody()->getContents();
+
+            if (!empty($responseInJason)) {
+                $result = json_decode($responseInJason, true);
+            } else {
+                $result = ['errors' => [['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
+            }
+        }
+
+        return $result;
+    }
+
     private function getResponse(ResponseInterface $response): array
     {
         $result = [];
