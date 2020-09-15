@@ -2,7 +2,6 @@
 
 namespace Syno\Cint\Demand\Resources;
 
-use Syno\Cint\Demand\Config;
 use Syno\Cint\Demand\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -10,19 +9,14 @@ class Respondent
 {
     const NOT_FOUND = 404;
 
-    /** @var Config */
-    private $config;
-
     /** @var Client */
     private $client;
 
     /**
-     * @param Config $config
      * @param Client $client
      */
-    public function __construct(Config $config, Client $client)
+    public function __construct(Client $client)
     {
-        $this->config = $config;
         $this->client = $client;
     }
 
