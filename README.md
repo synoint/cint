@@ -4,7 +4,7 @@ This is a PHP library to work with [Cint AB](https://www.cint.com)
  public APIs:
 
 * [Connect API](https://cint-connect-api.readme.io/)
-* [Demand API](https://cint-demand-api.readme.io/)
+* [Demand API (Buyer API)](https://cint-demand-api.readme.io/)
 * [Profiling Data API](https://cint-profiling-data-api.readme.io/)
 * [Panel API (CDP)](https://cint-panel-api-cdp.readme.io/)
 
