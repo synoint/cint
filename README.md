@@ -10,7 +10,7 @@ This is a PHP library to work with [Cint AB](https://www.cint.com)
 
 ## Requirements
 
-* PHP 7.0+
+* PHP 7.1+
 * [Guzzle](http://guzzlephp.org)
 
 ## Installation
