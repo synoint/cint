@@ -4,27 +4,48 @@ namespace Syno\Cint\Demand;
 
 use Psr\Http\Message\ResponseInterface;
 use Syno\Cint\HttpClient;
-use Guzzle\Http\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
-    const DEMAND_API_ERROR_MESSAGE      = "Unable to get response from Cint Demand API";
-    const DEMAND_API_NOT_FOUND_MESSAGE  = "Not found";
+    const REQUEST_GET       = 'GET';
+    const REQUEST_POST      = 'POST';
+    const REQUEST_PATCH     = 'PATCH';
+    const REQUEST_DELETE    = 'DELETE';
 
-    /** @var Config */
-    private $config;
+    /** @var string */
+    private $apiDomain;
+
+    /** @var string */
+    private $apiKey;
 
     /** @var HttpClient */
     private $client;
 
     /**
-     * @param Config $config
-     * @param HttpClient $client
+     * @param HttpClient    $client
+     * @param string        $apiDomain
+     * @param string        $apiKey
      */
-    public function __construct(Config $config, HttpClient $client)
+    public function __construct(
+        HttpClient  $client,
+        string      $apiDomain = '',
+        string      $apiKey = ''
+    )
     {
-        $this->config = $config;
-        $this->client = $client;
+        $this->apiDomain    = $apiDomain;
+        $this->apiKey       = $apiKey;
+        $this->client       = $client;
+    }
+
+    /**
+     * @param string $apiKey
+     */
+    public function setApiKey(string $apiKey)
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
     }
 
     /**
@@ -35,172 +56,117 @@ class Client
      */
     public function get(string $uri, array $parameters = null): array
     {
-        $headerParameters = [
-            'headers' =>
-                [
-                    'x-api-key' => $this->config->getApiKey()
-                ]
-        ];
-
-        if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, ['query' => $parameters]);
-        } else {
-            $parameters = $headerParameters;
-        }
-
-        try {
-            $response = $this->client->request(
-                'GET',
-                $this->config->getDomain() . $uri, $parameters
-            );
-
-            $result = $this->getResponse($response);
-
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-
-            $responseInJason = $e->getResponse()->getBody()->getContents();
-
-            if(!empty($responseInJason)) {
-                $result = json_decode($responseInJason, true);
-            } else {
-                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
-            }
-        }
-
-        return $result;
+        return $this->request(self::REQUEST_GET, $uri, $parameters);
     }
 
+    /**
+     * @param string $uri
+     * @param array $parameters
+     *
+     * @return array
+     */
     public function post(string $uri, array $parameters = null): array
     {
-        $headerParameters = [
-            'headers' =>
-                [
-                    'x-api-key' => $this->config->getApiKey()
-                ]
-        ];
-
-        if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, ['json' => $parameters]);
-        } else {
-            $parameters = $headerParameters;
-        }
-
-        try {
-            $response = $this->client->request(
-                'POST',
-                $this->config->getDomain() . $uri, $parameters
-            );
-
-            $result = $this->getResponse($response);
-
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-
-            $responseInJason = $e->getResponse()->getBody()->getContents();
-
-            if(!empty($responseInJason)) {
-                $result = json_decode($responseInJason, true);
-            } else {
-                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
-            }
-        }
-
-        return $result;
+        return $this->request(self::REQUEST_POST, $uri, $parameters);
     }
 
+    /**
+     * @param string $uri
+     * @param array $parameters
+     *
+     * @return array
+     */
     public function patch(string $uri, array $parameters = null): array
     {
-        $headerParameters = [
-            'headers' =>
-                [
-                    'x-api-key' => $this->config->getApiKey()
-                ]
-        ];
-
-        if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, ['json' => $parameters]);
-        } else {
-            $parameters = $headerParameters;
-        }
-
-        try{
-            $response = $this->client->request(
-                'PATCH',
-                $this->config->getDomain() . $uri, $parameters
-            );
-
-            $result = $this->getResponse($response);
-
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-
-            $responseInJason = $e->getResponse()->getBody()->getContents();
-
-            if(!empty($responseInJason)) {
-                $result = json_decode($responseInJason, true);
-            } else {
-                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
-            }
-        }
-
-        return $result;
+        return $this->request(self::REQUEST_PATCH, $uri, $parameters);
     }
 
+    /**
+     * @param string $uri
+     * @param array $parameters
+     *
+     * @return array
+     */
     public function delete(string $uri, array $parameters = null): array
     {
-        $headerParameters = [
-            'headers' =>
-                [
-                    'x-api-key' => $this->config->getApiKey()
-                ]
-        ];
+        return $this->request(self::REQUEST_DELETE, $uri, $parameters);
+    }
 
-        if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, ['json' => $parameters]);
-        } else {
-            $parameters = $headerParameters;
-        }
-
+    /**
+     * @param string $requestType
+     * @param string $url
+     * @param array $parameters
+     *
+     * @return array
+     */
+    private function request(string $requestType, string $url, ?array $parameters): array
+    {
         try {
             $response = $this->client->request(
-                'DELETE',
-                $this->config->getDomain() . $uri, $parameters
+                $requestType,
+                $this->apiDomain . $url, $this->setParameters($requestType, $parameters)
             );
 
-            $result = $this->getResponse($response);
+            $result = $this->getSuccessResponse($response);
 
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-
-            $responseInJason = $e->getResponse()->getBody()->getContents();
-
-            if (!empty($responseInJason)) {
-                $result = json_decode($responseInJason, true);
-            } else {
-                $result = ['errors' => [['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
-            }
+        } catch (RequestException $exception) {
+            $result = $this->getErrorResponse($exception->getResponse());
         }
 
         return $result;
     }
 
-    private function getResponse(ResponseInterface $response): array
+    /**
+     * @param string $requestType
+     * @param string $parameters
+     *
+     * @return array
+     */
+    private function setParameters(string $requestType, ?array $parameters): array
     {
-        $result = [];
+        $headerParameters = [
+            'headers' =>
+                [
+                    'x-api-key' => $this->apiKey
+                ]
+        ];
 
-        switch ($response->getStatusCode()) {
-            case 200:
-            case 201:
-            case 202:
-                $result = json_decode($response->getBody(), true);
-                break;
-            case 204:
-            case 205:
-                $result[] = true;
-                break;
-            case 404:
-                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_NOT_FOUND_MESSAGE]]];
-                break;
-            case 500:
-                $result = ['errors'=>[['field' => '', 'message' => self::DEMAND_API_ERROR_MESSAGE]]];
-                break;
+        if (!empty($parameters)) {
+            $parameters = array_merge($headerParameters, [($requestType == self::REQUEST_GET ? 'query' : 'json') => $parameters]);
+        } else {
+            $parameters = $headerParameters;
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @return array
+     */
+    private function getSuccessResponse(ResponseInterface $response): array
+    {
+        if(!empty($response->getBody())){
+            $result = json_decode($response->getBody(), true);
+        } else {
+            $result = [true];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param ResponseInterface $response
+     *
+     * @return array
+     */
+    private function getErrorResponse(ResponseInterface $response): array
+    {
+        $result = json_decode($response->getBody()->getContents(), true);
+
+        if(isset($result['message'])) {
+            $result = ['errors'=>[['field' => '', 'message' => $result['message']]]];
         }
 
         return $result;
