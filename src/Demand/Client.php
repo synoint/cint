@@ -8,11 +8,6 @@ use GuzzleHttp\Exception\RequestException;
 
 class Client
 {
-    const REQUEST_GET       = 'GET';
-    const REQUEST_POST      = 'POST';
-    const REQUEST_PATCH     = 'PATCH';
-    const REQUEST_DELETE    = 'DELETE';
-
     /** @var string */
     private $apiDomain;
 
@@ -56,7 +51,7 @@ class Client
      */
     public function get(string $uri, array $parameters = null): array
     {
-        return $this->request(self::REQUEST_GET, $uri, $parameters);
+        return $this->request('GET', $uri, $parameters);
     }
 
     /**
@@ -67,7 +62,7 @@ class Client
      */
     public function post(string $uri, array $parameters = null): array
     {
-        return $this->request(self::REQUEST_POST, $uri, $parameters);
+        return $this->request('POST', $uri, $parameters);
     }
 
     /**
@@ -78,7 +73,7 @@ class Client
      */
     public function patch(string $uri, array $parameters = null): array
     {
-        return $this->request(self::REQUEST_PATCH, $uri, $parameters);
+        return $this->request('PATCH', $uri, $parameters);
     }
 
     /**
@@ -89,7 +84,7 @@ class Client
      */
     public function delete(string $uri, array $parameters = null): array
     {
-        return $this->request(self::REQUEST_DELETE, $uri, $parameters);
+        return $this->request('DELETE', $uri, $parameters);
     }
 
     /**
@@ -132,7 +127,7 @@ class Client
         ];
 
         if (!empty($parameters)) {
-            $parameters = array_merge($headerParameters, [($requestType == self::REQUEST_GET ? 'query' : 'json') => $parameters]);
+            $parameters = array_merge($headerParameters, [($requestType == 'GET' ? 'query' : 'json') => $parameters]);
         } else {
             $parameters = $headerParameters;
         }
@@ -147,10 +142,10 @@ class Client
      */
     private function getSuccessResponse(ResponseInterface $response): array
     {
+        $result = [];
+
         if(!empty($response->getBody())){
-            $result = json_decode($response->getBody(), true);
-        } else {
-            $result = [true];
+            $result = json_decode($response->getBody()->getContents(), true);
         }
 
         return $result;
