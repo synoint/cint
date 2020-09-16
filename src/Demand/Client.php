@@ -142,13 +142,8 @@ class Client
      */
     private function getSuccessResponse(ResponseInterface $response): array
     {
-        $result = [];
-
-        if(!empty($response->getBody())){
-            $result = json_decode($response->getBody()->getContents(), true);
-        }
-
-        return $result;
+        $result = json_decode($response->getBody()->getContents(), true);
+        return $result !== null ? $result : [];
     }
 
     /**
