@@ -92,4 +92,15 @@ class Survey
     {
         return $this->client->get("/ordering/surveys/".$surveyId."/CurrentCost");
     }
+
+    /**
+     * @param integer $surveyId
+     * Returns survey test urls
+     *
+     * @return array
+     */
+    public function getTestLinks(int $surveyId): array
+    {
+        return $this->client->get("/ordering/surveys/".$surveyId."/Test");
+    }
 }
