@@ -159,6 +159,6 @@ class Client
             $result = ['errors'=>[['field' => '', 'message' => $result['message']]]];
         }
 
-        return $result;
+        return $result !== null ? $result : [];
     }
 }
