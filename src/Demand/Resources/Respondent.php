@@ -35,4 +35,16 @@ class Respondent
 
         return $result;
     }
+
+    /**
+     * @param string $guid
+     * @param int $statusId
+     * Changes respondent status
+     *
+     * @return array
+     */
+    public function changeStatus(string $guid, int $statusId): array
+    {
+        return $this->client->post('/fulfillment/respondents/transition', [['id' => $guid, 'value' => $statusId]]);
+    }
 }
