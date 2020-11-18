@@ -45,6 +45,6 @@ class Respondent
      */
     public function changeStatus(string $guid, int $statusId): array
     {
-        return $this->client->post('/fulfillment/respondents/transition', [['id' => $guid, 'value' => $statusId]]);
+        return $this->client->post('/fulfillment/respondents/transition', ['id' => $guid, 'status' => $statusId]);
     }
 }
