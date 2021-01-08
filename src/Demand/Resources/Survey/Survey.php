@@ -42,6 +42,18 @@ class Survey
 
     /**
      * @param int $id
+     * @param float $cpi
+     * Changes survey cost per interview(cpi)
+     *
+     * @return array
+     */
+    public function changeCpi(int $id, float $cpi): array
+    {
+        return $this->client->patch('/ordering/surveys/' . $id, [['op' => 'replace', 'path' => '/cpi/amount', 'value' => $cpi]]);
+    }
+
+    /**
+     * @param int $id
      * @param int $surveyLimit
      * @param array $quotasLimit
      * Updates survey limits
