@@ -82,6 +82,17 @@ class Client
      *
      * @return array
      */
+    public function put(string $uri, array $parameters = null): array
+    {
+        return $this->request('PUT', $uri, $parameters);
+    }
+
+    /**
+     * @param string $uri
+     * @param array $parameters
+     *
+     * @return array
+     */
     public function delete(string $uri, array $parameters = null): array
     {
         return $this->request('DELETE', $uri, $parameters);

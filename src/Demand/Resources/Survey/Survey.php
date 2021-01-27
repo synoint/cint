@@ -29,6 +29,17 @@ class Survey
     }
 
     /**
+     * @param array $params
+     * Update survey project
+     *
+     * @return array
+     */
+    public function update(int $id, array $params): array
+    {
+        return $this->client->put('/ordering/surveys/'.$id, $params);
+    }
+
+    /**
      * @param int $id
      * @param int $statusId
      * Changes survey project status
