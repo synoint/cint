@@ -39,12 +39,24 @@ class Respondent
     /**
      * @param string $guid
      * @param int $statusId
-     * Changes respondent status
+     * Changes respondent status to Complete
      *
      * @return array
      */
     public function changeStatus(string $guid, int $statusId): array
     {
         return $this->client->post('/fulfillment/respondents/transition', ['id' => $guid, 'status' => $statusId]);
+    }
+
+    /**
+     * @param string $guid
+     * @param int $statusId
+     * Changes respondent status to Screen out and etc...
+     *
+     * @return array
+     */
+    public function reconcileStatus(string $guid, int $statusId): array
+    {
+        return $this->client->post('/fulfillment/respondents/reconciliations', [['id' => $guid, 'status' => $statusId]]);
     }
 }
