@@ -90,9 +90,20 @@ class Survey
      *
      * @return array
      */
-    public function getOne($id): array
+    public function getOne(int $id): array
     {
         return $this->client->get('/ordering/surveys/' . $id);
+    }
+
+    /**
+     * @param integer $id
+     * Returns survey statistics by id
+     *
+     * @return array
+     */
+    public function getStatistics(int $id): array
+    {
+        return $this->client->get('/ordering/surveys/' . $id.'/statistics');
     }
 
     /**
