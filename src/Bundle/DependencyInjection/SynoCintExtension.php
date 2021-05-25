@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Syno\Cint\Connect;
 use Syno\Cint\Demand;
+use Syno\Cint\Panel;
 use Syno\Cint\HttpClient;
 
 class SynoCintExtension extends ConfigurableExtension
@@ -39,5 +40,8 @@ class SynoCintExtension extends ConfigurableExtension
                 $container->removeDefinition($demandResourceId);
             }
         }
+
+        $panelConfigDef = $container->getDefinition(Panel\Client::class);
+        $panelConfigDef->setArguments([$container->getDefinition(HttpClient::class)]);
     }
 }

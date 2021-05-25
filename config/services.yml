@@ -12,3 +12,6 @@ services:
 
     Syno\Cint\Demand\:
         resource: '../src/Demand/*'
+
+    Syno\Cint\Panel\:
+        resource: '../src/Panel/*'
