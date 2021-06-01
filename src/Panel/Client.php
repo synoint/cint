@@ -40,15 +40,27 @@ class Client
         $e = new \Exception(sprintf('No response for uri %s', $uri));
         while ($retries--) {
             try {
-                $response = $this->client->get($uri, $options);
-
-                return $response;
-
+                return $this->client->get($uri, $options);
             } catch (GuzzleHttp\Exception\RequestException $e) {
                 sleep(2);
             }
         }
 
         throw $e;
+    }
+
+    public function post(string $uri, array $parameters = null): ResponseInterface
+    {
+        return $this->client->post($uri, $parameters);
+    }
+
+    public function patch(string $uri, array $parameters = null): ResponseInterface
+    {
+        return $this->client->patch($uri, $parameters);
+    }
+
+    public function delete(string $uri, array $parameters = null): ResponseInterface
+    {
+        return $this->client->delete($uri, $parameters);
     }
 }
