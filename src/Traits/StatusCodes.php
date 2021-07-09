@@ -17,6 +17,7 @@ trait StatusCodes
     public $HTTP_FORBIDDEN = 403;
     public $HTTP_NOT_FOUND = 404;
     public $HTTP_METHOD_NOT_ALLOWED = 422;
+    public $HTTP_CREATED = 201;
 
     /**
      * Server Error 5xx

@@ -58,28 +58,18 @@ class Panelist
     public function update(string $apiKey, string $apiSecret, int $panelistId, array $data): array
     {
         $result = [];
-        try {
-            $res = $this->client->patch(
-                sprintf('%s/panels/%s/panelists/%d', $this->client->getApiUrl(), $apiKey, $panelistId),
-                [
-                    'auth'    => [$apiKey, $apiSecret],
-                    'headers' => ['Accept' => 'application/json'],
-                    'json'    => ['panelist' => $data]
-                ]
-            );
 
-            if ($res && $this->HTTP_OK === $res->getStatusCode()) {
-                $result = json_decode($res->getBody(), true);
-            }
-        } catch (ClientException $e) {
-            $summary = [];
-            $errors  = json_decode($e->getResponse()->getBody()->getContents(), true);
+        $res = $this->client->patch(
+            sprintf('%s/panels/%s/panelists/%d', $this->client->getApiUrl(), $apiKey, $panelistId),
+            [
+                'auth'    => [$apiKey, $apiSecret],
+                'headers' => ['Accept' => 'application/json'],
+                'json'    => ['panelist' => $data]
+            ]
+        );
 
-            foreach ($errors as $field => $messages) {
-                $summary[] = sprintf('%s %s', $field, implode('; ', $messages));
-            }
-
-            throw new \RuntimeException(implode('; ', $summary), $e->getCode());
+        if ($res && $this->HTTP_OK === $res->getStatusCode()) {
+            $result = json_decode($res->getBody(), true);
         }
 
         return $result['panelist'] ?? [];
@@ -87,27 +77,57 @@ class Panelist
 
     public function unsubscribe(string $apiKey, string $apiSecret, int $panelistId)
     {
-        try {
-            $res = $this->client->delete(
-                sprintf('%s/panels/%s/panelists/%d', $this->client->getApiUrl(), $apiKey, $panelistId),
-                [
-                    'auth'    => [$apiKey, $apiSecret],
-                    'headers' => ['Accept' => 'application/json'],
-                ]
-            );
+        $res = $this->client->delete(
+            sprintf('%s/panels/%s/panelists/%d', $this->client->getApiUrl(), $apiKey, $panelistId),
+            [
+                'auth'    => [$apiKey, $apiSecret],
+                'headers' => ['Accept' => 'application/json'],
+            ]
+        );
 
-            if ($res && $this->HTTP_OK === $res->getStatusCode()) {
-                return json_decode($res->getBody(), true);
-            }
-        } catch (ClientException $e) {
-            $errors = json_decode($e->getResponse()->getBody()->getContents(), true);
-            // Make a human readable list of errors to be passed to the UI
-            foreach ($errors as $field => $messages) {
-                $summary[] = sprintf('%s %s', $field, implode('; ', $messages));
-            }
-            throw new \RuntimeException(implode('; ', $summary), $e->getCode());
+        if ($res && $this->HTTP_OK === $res->getStatusCode()) {
+            return json_decode($res->getBody(), true);
         }
 
         return null;
+    }
+
+    public function fetchProfileByEmail(string $apiKey, string $apiSecret, string $email): array
+    {
+        $result = [];
+
+        $res = $this->client->getWithRetry(
+            sprintf('%s/panels/%s/panelists?email=%s', $this->client->getApiUrl(), $apiKey, $email),
+            [
+                'auth'    => [$apiKey, $apiSecret],
+                'headers' => ['Accept' => 'application/json'],
+            ]
+        );
+
+        if ($res && $this->HTTP_OK === $res->getStatusCode()) {
+            $result = json_decode($res->getBody(), true);
+        }
+
+        return $result['panelist'] ?? [];
+    }
+
+    public function register(string $apiKey, string $apiSecret, array $data) : array
+    {
+        $result = [];
+
+        $res = $this->client->post(
+            sprintf('%s/panels/%s/panelists', $this->client->getApiUrl(), $apiKey),
+            [
+                'auth'    => [$apiKey, $apiSecret],
+                'headers' => ['Accept' => 'application/json'],
+                'json'    => ['panelist' => $data]
+            ]
+        );
+
+        if ($res && $this->HTTP_CREATED === $res->getStatusCode()) {
+            $result = json_decode($res->getBody(), true);
+        }
+
+        return $result['panelist'] ?? [];
     }
 }
