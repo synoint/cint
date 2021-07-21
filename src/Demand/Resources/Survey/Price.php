@@ -21,12 +21,13 @@ class Price
      * @param int $incidenceRate
      * @param int $lengthOfInterview
      * @param int $countryId
+     * @param array $panelIds
      * Returns survey price estimation
      *
      * @return array
      */
-    public function getEstimation(int $incidenceRate, int $lengthOfInterview, int $countryId): array
+    public function getEstimation(int $incidenceRate, int $lengthOfInterview, int $countryId, array $panelIds): array
     {
-        return $this->client->post('/ordering/quotes/', ['incidenceRate' => $incidenceRate, 'lengthOfInterview' => $lengthOfInterview, 'countryId' => $countryId]);
+        return $this->client->post('/ordering/quotes/', ['incidenceRate' => $incidenceRate, 'lengthOfInterview' => $lengthOfInterview, 'countryId' => $countryId, 'targetedPanelIds' => $panelIds]);
     }
 }
